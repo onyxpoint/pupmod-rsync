@@ -19,36 +19,36 @@ Basic Usage
 
 To set up an rsync server, use something like the following:
 
-include 'rsync::server'
+    include 'rsync::server'
 
-# Set up the global configuration options.
-rsync::server::global { 'global':
-  address => '0.0.0.0'
-}
+    # Set up the global configuration options.
+    rsync::server::global { 'global':
+      address => '0.0.0.0'
+    }
 
-# Now set up some rsync shares
-rsync::server::section { 'default':
-  comment => 'The default file path',
-  path => '/path/to/share',
-  hosts_allow => '1.2.3.4'
-}
-rsync::server::section { 'test':
-  auth_users => 'testuser',
-  comment => 'Test comment',
-  path => '/some/path/to/test',
-  hosts_allow => '3.4.5.6',
-  outgoing_chmod => 'o-w'
-}
+    # Now set up some rsync shares
+    rsync::server::section { 'default':
+      comment => 'The default file path',
+      path => '/path/to/share',
+      hosts_allow => '1.2.3.4'
+    }
+    rsync::server::section { 'test':
+      auth_users => 'testuser',
+      comment => 'Test comment',
+      path => '/some/path/to/test',
+      hosts_allow => '3.4.5.6',
+      outgoing_chmod => 'o-w'
+    }
 
 To have a client pull from the rsync server, do the following:
 
-include 'rsync'
+    include 'rsync'
 
-rsync { 'foo':
-  source => 'default/foo,
-  target => '/tmp/foo',
-  server => $rsync_server
-}
+    rsync { 'foo':
+      source => 'default/foo,
+      target => '/tmp/foo',
+      server => $rsync_server
+    }
 
 Type Documentation
 ------------------
@@ -96,29 +96,30 @@ Don't send implied dirs.  Defaults to true  Valid values are `true`, `false`.
 The password to use. Only used if a username is specified
 If you want the password to be auto-generated, you can use the 
 'passgen' function in an inline_template.
-  rsync { "foo":
-    source => 'bar',
-    target => '/tmp/foo',
-    server => 'puppet',
-    user => 'foo',
-    password => inline_template("<%= Puppet::Parser::Functions::function('passgen'); '' %><%= scope.function_passgen(['$user']) %>
-")
-  }
 
+    rsync { "foo":
+        source => 'bar',
+        target => '/tmp/foo',
+        server => 'puppet',
+        user => 'foo',
+        password => inline_template("<%= Puppet::Parser::Functions::function('passgen'); '' %><%= scope.function_passgen(['$user']) %>
+")
+    }
 
 ##### password
 
 The password to use. Only used if a username is specified
 If you want the password to be auto-generated, you can use the 
 'passgen' function in an inline_template.
-  rsync { "foo":
-    source => 'bar',
-    target => '/tmp/foo',
-    server => 'puppet',
-    user => 'foo',
-    password => inline_template("<%= Puppet::Parser::Functions::function('passgen'); '' %><%= scope.function_passgen(['$user']) %>
+
+    rsync { "foo":
+        source => 'bar',
+        target => '/tmp/foo',
+        server => 'puppet',
+        user => 'foo',
+        password => inline_template("<%= Puppet::Parser::Functions::function('passgen'); '' %><%= scope.function_passgen(['$user']) %>
 ")
-  }
+     }
 
 
 ##### path
