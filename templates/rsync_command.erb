@@ -1,0 +1,67 @@
+<%
+t_str = "#{rsync_path} -i -p -H -S -z -r --timeout=#{rsync_timeout}"
+
+if preserve_ACL.eql?("true") then 
+    t_str += " -A"
+end
+
+if preserve_xattrs.eql?("true") then 
+    t_str += " -X"
+end
+
+if preserve_owner.eql?("true") then 
+    t_str += " -o"
+end
+
+if preserve_group.eql?("true") then 
+    t_str += " -g"
+end
+
+if delete.eql?("true") then
+    t_str += " --delete"
+end
+
+if !preserve_devices.eql?("false") then 
+    t_str += " -D"
+end
+
+if lbwlimit =~ /^\d+$/ then
+    t_str += " --bwlimit=#{lbwlimit}"
+end
+
+if !exclude.eql?("nil") then 
+    exclude.each do |excl|
+        t_str += " --exclude='#{excl}'"
+    end
+end
+
+if !copy_links.eql?("false") then
+    t_str += " -L"
+else
+    t_str += " -l"
+end
+
+if size_only.eql?('true') then
+    t_str += " --size-only"
+else
+    t_str += " -c"
+end
+
+if !no_implied_dirs.eql?('false') then
+    t_str += " --no-implied-dirs"
+end
+
+t_rsync_server = rsync_server
+if not user.empty? then
+  t_rsync_server = "#{user}@#{t_rsync_server}"
+
+  t_str += " --password-file=/etc/rsync/#{user}"
+end
+
+if pull.eql?('true') then
+  t_str += " #{proto}://#{t_rsync_server}/#{source_path} #{target_path}"
+else
+  t_str += " #{source_path} #{proto}://#{t_rsync_server}/#{target_path}"
+end
+-%>
+<%= t_str %>

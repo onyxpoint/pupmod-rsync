@@ -1,0 +1,7 @@
+<% if has_variable?('motd_file') && ! motd_file.empty? then -%>
+motd file = <%= motd_file %>
+<% end -%>
+pid file = <%= pid_file %>
+syslog facility = <%= syslog_facility %>
+port = <%= port %>
+address = <%= address %>
